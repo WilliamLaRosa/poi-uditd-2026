@@ -648,7 +648,7 @@ function renderFinanciero(){
   const ultimo=ejecutados[ejecutados.length-1];
 
   document.getElementById('fin-kpis').innerHTML=`
-    <div class="kpi" style="border-top:2px solid var(--acc)"><div class="kpi-l">Presupuesto Anual</div><div class="kpi-v" style="color:var(--acc);font-size:18px">${fmtS(totP)}</div><div class="kpi-s">Lab. Patología Clínica</div></div>
+    <div class="kpi" style="border-top:2px solid var(--acc)"><div class="kpi-l">Presupuesto Anual</div><div class="kpi-v" style="color:var(--acc);font-size:18px">${fmtS(totP)}</div><div class="kpi-s">Unidad de Desarrollo de Investigación, Tecnologías y Docencia</div></div>
     <div class="kpi" style="border-top:2px solid var(--grn)"><div class="kpi-l">Ejecutado a la fecha</div><div class="kpi-v" style="color:var(--grn);font-size:18px">${fmtS(totE)}</div><div class="kpi-s">${Math.round(totE/totP*100)}% del presupuesto anual</div></div>
     <div class="kpi" style="border-top:2px solid var(--amb)"><div class="kpi-l">Avance último mes (${ultimo?.mes})</div><div class="kpi-v" style="color:var(--amb)">${ultimo?Math.round(ultimo.ejec/ultimo.prog*100)+'%':'—'}</div><div class="kpi-s">${fmtS(ultimo?.ejec)} ejec. / ${fmtS(ultimo?.prog)} prog.</div></div>
     <div class="kpi" style="border-top:2px solid var(--red)"><div class="kpi-l">Saldo por ejecutar</div><div class="kpi-v" style="color:var(--red);font-size:18px">${fmtS(saldo)}</div><div class="kpi-s">${fin.length-ejecutados.length} meses pendientes</div></div>
