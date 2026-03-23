@@ -18,16 +18,16 @@
   "financiero": [
     { "mes": "ENE", "prog": 1991070.88, "ejec": 472309 },
     { "mes": "FEB", "prog": 1991070.46, "ejec": 472309 },
-    { "mes": "MAR", "prog": 76044.90, "ejec": null },
-    { "mes": "ABR", "prog": 87639.82, "ejec": null },
-    { "mes": "MAY", "prog": 86341.12, "ejec": null },
-    { "mes": "JUN", "prog": 86034.76, "ejec": null },
-    { "mes": "JUL", "prog": 83794.82, "ejec": null },
-    { "mes": "AGO", "prog": 77491.00, "ejec": null },
-    { "mes": "SET", "prog": 83314.62, "ejec": null },
-    { "mes": "OCT", "prog": 76989.60, "ejec": null },
-    { "mes": "NOV", "prog": 81941.70, "ejec": null },
-    { "mes": "DIC", "prog": 81941.70, "ejec": null }
+    { "mes": "MAR", "prog": null, "ejec": null },
+    { "mes": "ABR", "prog": null, "ejec": null },
+    { "mes": "MAY", "prog": null, "ejec": null },
+    { "mes": "JUN", "prog": null, "ejec": null },
+    { "mes": "JUL", "prog": null, "ejec": null },
+    { "mes": "AGO", "prog": null, "ejec": null },
+    { "mes": "SET", "prog": null, "ejec": null },
+    { "mes": "OCT", "prog": null, "ejec": null },
+    { "mes": "NOV", "prog": null, "ejec": null },
+    { "mes": "DIC", "prog": null, "ejec": null }
   ],
 
   "subtareas": [
