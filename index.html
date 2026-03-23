@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POI 2026 · UDITD · Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#0f1117;--surf:#1a1d27;--card:#1f2333;--brd:#2a2f45;
+  --txt:#e8eaf0;--mut:#8892a4;--acc:#4f8ef7;
+  --grn:#22d3a0;--amb:#f59e0b;--red:#f04b4b;--pur:#a78bfa;--tel:#38bdf8;--ges:#fb923c;
+  --grn-d:rgba(34,211,160,.12);--amb-d:rgba(245,158,11,.12);--red-d:rgba(240,75,75,.12);
+  --acc-d:rgba(79,142,247,.12);--pur-d:rgba(167,139,250,.12);
+  --sb:220px;--tb:52px;--r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);display:flex;min-height:100vh;font-size:13px}
+
+/* SIDEBAR */
+.sb{width:var(--sb);background:var(--surf);border-right:1px solid var(--brd);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200}
+.sb-brand{padding:18px 16px 14px;border-bottom:1px solid var(--brd)}
+.sb-logo{font-size:11px;font-weight:700;color:#fff}
+.sb-sub{font-size:10px;color:var(--mut);margin-top:2px}
+.sb-sec{font-size:9px;color:rgba(136,146,164,.4);padding:14px 16px 5px;text-transform:uppercase;letter-spacing:1.2px}
+.sb-nav{flex:1;padding:8px 0;overflow-y:auto}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 16px;cursor:pointer;color:var(--mut);font-size:12px;border-left:2px solid transparent;transition:all .15s}
+.nav-i:hover{background:rgba(255,255,255,.04);color:var(--txt)}
+.nav-i.on{background:rgba(79,142,247,.1);color:#fff;border-left-color:var(--acc)}
+.nav-i svg{width:15px;height:15px;flex-shrink:0}
+.sb-foot{padding:10px 16px;border-top:1px solid var(--brd);font-size:10px;color:rgba(136,146,164,.4)}
+.sb-tag{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:20px;background:rgba(79,142,247,.2);color:var(--acc);font-weight:600}
+
+/* TOPBAR */
+.main{margin-left:var(--sb);flex:1;display:flex;flex-direction:column}
+.topbar{height:var(--tb);background:var(--surf);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 22px;gap:12px;position:sticky;top:0;z-index:100}
+#pt{font-size:14px;font-weight:600;color:#fff;flex:1}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid}
+.c-blue{background:var(--acc-d);color:var(--acc);border-color:rgba(79,142,247,.3)}
+.c-amber{background:var(--amb-d);color:var(--amb);border-color:rgba(245,158,11,.3)}
+.c-green{background:var(--grn-d);color:var(--grn);border-color:rgba(34,211,160,.3)}
+.c-red{background:var(--red-d);color:var(--red);border-color:rgba(240,75,75,.3)}
+
+/* PAGES */
+.page{display:none;padding:18px 20px;animation:fi .2s ease}
+.page.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.g32{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:14px}
+.mb{margin-bottom:14px}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--brd);border-radius:var(--r);padding:16px}
+.card-t{font-size:12px;font-weight:600;color:var(--txt);margin-bottom:3px}
+.card-s{font-size:10px;color:var(--mut);margin-bottom:12px}
+.cw{position:relative;width:100%}
+
+/* KPI */
+.kpi{background:var(--card);border:1px solid var(--brd);border-radius:var(--r);padding:14px 16px}
+.kpi-l{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-v{font-size:24px;font-weight:700;line-height:1}
+.kpi-s{font-size:10px;color:var(--mut);margin-top:5px}
+.kpi-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.07);margin-top:10px}
+.kpi-f{height:100%;border-radius:2px}
+
+/* TABLE */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{padding:7px 10px;text-align:left;font-weight:600;color:var(--mut);border-bottom:1px solid var(--brd);font-size:10px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;background:rgba(255,255,255,.02)}
+td{padding:7px 10px;border-bottom:1px solid rgba(42,47,69,.5);color:var(--txt)}
+tr:hover td{background:rgba(255,255,255,.02)}
+.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+
+/* SEMAFORO */
+.sem{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sg{background:var(--grn);box-shadow:0 0 5px var(--grn)}
+.sa{background:var(--amb);box-shadow:0 0 5px var(--amb)}
+.sr{background:var(--red);box-shadow:0 0 5px var(--red)}
+.sn{background:var(--mut);opacity:.5}
+
+/* PROGRESS */
+.prw{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(42,47,69,.4)}
+.prw:last-child{border-bottom:none}
+.prw-l{flex:1;font-size:11px}
+.prw-b{width:80px;height:5px;background:rgba(255,255,255,.07);border-radius:3px}
+.prw-f{height:100%;border-radius:3px}
+.prw-v{width:40px;text-align:right;font-size:11px;font-weight:600}
+
+/* FILTER */
+.fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.fbar label{font-size:11px;color:var(--mut)}
+select{padding:5px 10px;border:1px solid var(--brd);border-radius:6px;font-size:11px;background:var(--card);color:var(--txt);cursor:pointer;outline:none}
+select:hover,select:focus{border-color:var(--acc)}
+.fc{margin-left:auto;font-size:10px;color:var(--mut)}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
+.spin{width:32px;height:32px;border:3px solid var(--brd);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#err{display:none;position:fixed;inset:0;background:var(--bg);align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:12px;padding:40px;text-align:center}
+#err h2{color:var(--red);font-size:18px}
+#err p{color:var(--mut);font-size:13px;max-width:560px;line-height:1.7}
+#err code{background:var(--card);border:1px solid var(--brd);padding:12px 20px;border-radius:8px;font-size:12px;color:var(--amb);display:block;margin-top:8px;text-align:left;line-height:2}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spin"></div>
+  <div style="font-size:13px;color:var(--mut)">Cargando datos desde datos.json…</div>
+</div>
+
+<div id="err">
+  <h2>⚠ No se pudo cargar datos.json</h2>
+  <p>El dashboard necesita ejecutarse desde un servidor local. <strong>No funciona con doble clic</strong> porque el navegador bloquea la lectura de archivos locales por seguridad.</p>
+  <p>Soluciones rápidas:</p>
+  <code>
+    Opción A — Python (recomendado):<br>
+    &nbsp;&nbsp;1. Abre CMD en la carpeta del proyecto<br>
+    &nbsp;&nbsp;2. Escribe: <strong>python -m http.server 8080</strong><br>
+    &nbsp;&nbsp;3. Abre: <strong>http://localhost:8080</strong><br><br>
+    Opción B — VS Code:<br>
+    &nbsp;&nbsp;Instala extensión "Live Server" → clic derecho en index.html → Open with Live Server
+  </code>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-brand">
+    <div class="sb-logo" id="sb-periodo">UDITD · POI 2026</div>
+    <div class="sb-sub" id="sb-ult">Cargando…</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Vistas</div>
+    <div class="nav-i on" onclick="nav(this,'overview')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      Resumen Ejecutivo
+    </div>
+    <div class="nav-i" onclick="nav(this,'fisico')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Metas Físicas
+      <span class="sb-tag" id="sb-total">–</span>
+    </div>
+    <div class="nav-i" onclick="nav(this,'mensual')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Avance Mensual
+    </div>
+    <div class="nav-i" onclick="nav(this,'aoi')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Por Actividad (AOI)
+    </div>
+    <div class="nav-i" onclick="nav(this,'financiero')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Ejecución Financiera
+    </div>
+    <div class="sb-sec">Análisis</div>
+    <div class="nav-i" onclick="nav(this,'brechas')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Brechas y Alertas
+    </div>
+  </nav>
+  <div class="sb-foot">CC-95 · INSNSB</div>
+</aside>
+
+<main class="main">
+<div class="topbar">
+  <div id="pt">Resumen Ejecutivo</div>
+  <span class="chip c-blue">POI 2026</span>
+  <span class="chip c-amber" id="chip-corte">Cargando…</span>
+  <span class="chip c-blue">CC-95 · UDITD</span>
+</div>
+
+<!-- ── P1: RESUMEN ── -->
+<div class="page on" id="pg-overview">
+  <div class="g4" id="kpi-row"></div>
+  <div class="g21">
+    <div class="card">
+      <div class="card-t">Avance Físico Acumulado por AOI</div>
+      <div class="card-s">Programado vs. Ejecutado · Clic en barra para filtrar semáforo</div>
+      <div class="cw" style="height:230px"><canvas id="c-aoi"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Estado de Indicadores</div>
+      <div class="card-s">Distribución semáforo</div>
+      <div class="cw" style="height:160px"><canvas id="c-sem-pie"></canvas></div>
+      <div id="sem-legend" style="margin-top:12px"></div>
+    </div>
+  </div>
+  <div class="g32">
+    <div class="card">
+      <div class="card-t">Semáforo de Indicadores <span id="aoi-filter-lbl" style="color:var(--acc);font-size:10px;margin-left:8px"></span></div>
+      <div class="card-s">Clic en barra superior para filtrar · Clic en espacio vacío para quitar filtro</div>
+      <div class="tw"><table><thead><tr><th>Est.</th><th>AOI</th><th>Indicador</th><th>Traz.</th><th class="num">P.Acum</th><th class="num">E.Acum</th><th class="num">%</th></tr></thead><tbody id="tbody-ov"></tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Trazadores por Área</div>
+      <div class="card-s">Compromisos de mejora institucional</div>
+      <div class="cw" style="height:200px"><canvas id="c-traz"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── P2: METAS FÍSICAS ── -->
+<div class="page" id="pg-fisico">
+  <div class="fbar">
+    <label>Área:</label>
+    <select id="f-area" onchange="filtrar()">
+      <option value="">Todas</option>
+      <option>INVESTIGACIÓN</option><option>INNOVACIÓN</option>
+      <option>CIRUGIA EXP.</option><option>DOCENCIA</option>
+      <option>TELECAPACITACIÓN</option><option>GESTIÓN</option>
+    </select>
+    <label>Trazador:</label>
+    <select id="f-traz" onchange="filtrar()">
+      <option value="">Todos</option><option value="SI">Sí</option><option value="NO">No</option>
+    </select>
+    <label>Estado:</label>
+    <select id="f-est" onchange="filtrar()">
+      <option value="">Todos</option>
+      <option value="verde">Verde ≥100%</option>
+      <option value="rojo">Rojo &lt;50%</option>
+      <option value="sin">Sin meta</option>
+    </select>
+    <label>Mes de corte:</label>
+    <select id="f-mes" onchange="filtrar()">
+      <option value="feb">Ene-Feb (actual)</option>
+      <option value="mar">Ene-Mar</option><option value="abr">Ene-Abr</option>
+      <option value="may">Ene-May</option><option value="jun">Ene-Jun</option>
+      <option value="jul">Ene-Jul</option><option value="ago">Ene-Ago</option>
+      <option value="set">Ene-Set</option><option value="oct">Ene-Oct</option>
+      <option value="nov">Ene-Nov</option><option value="dic">Ene-Dic</option>
+    </select>
+    <span class="fc" id="fc"></span>
+  </div>
+  <div class="card">
+    <div class="card-t">Matriz de Metas Físicas — Detalle Completo</div>
+    <div class="card-s">Todos los 38 indicadores del POI 2026 · CC-95 · UDITD</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Est.</th><th>Área</th><th>AOI</th><th>Sub-tarea / Indicador</th><th>Unidad</th><th>Traz.</th>
+          <th class="num">Prog.Acum.</th><th class="num">Ejec.Acum.</th><th class="num">Brecha</th><th class="num">% Avance</th><th class="num">Meta Anual</th><th class="num">% vs Anual</th>
+        </tr></thead>
+        <tbody id="tbody-fis"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── P3: MENSUAL ── -->
+<div class="page" id="pg-mensual">
+  <div class="fbar">
+    <label>AOI:</label>
+    <select id="mes-aoi" onchange="renderMensual()">
+      <option value="">Todas</option>
+      <option value="AOI177">AOI177 · Investigaciones</option>
+      <option value="AOI176">AOI176 · Cirugía Exp.</option>
+      <option value="AOI273">AOI273 · Docencia</option>
+      <option value="AOI381">AOI381 · Telecapacitación</option>
+      <option value="AOI268">AOI268 · Gestión</option>
+    </select>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-t">Evolución Mensual — Ejecutado por mes</div>
+      <div class="card-s">Suma de ejecutados por mes (todos los indicadores del AOI seleccionado)</div>
+      <div class="cw" style="height:220px"><canvas id="c-evol"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Cumplimiento Mensual — % Ejec./Prog.</div>
+      <div class="card-s">Solo meses con meta programada &gt; 0</div>
+      <div class="cw" style="height:220px"><canvas id="c-cum"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">Detalle por Mes y Sub-tarea</div>
+    <div class="card-s">Programado y ejecutado mes a mes</div>
+    <div class="tw"><table>
+      <thead><tr><th>Indicador</th><th class="num">ENE</th><th class="num">FEB</th><th class="num">MAR</th><th class="num">ABR</th><th class="num">MAY</th><th class="num">JUN</th><th class="num">JUL</th><th class="num">AGO</th><th class="num">SET</th><th class="num">OCT</th><th class="num">NOV</th><th class="num">DIC</th><th class="num">Anual</th></tr></thead>
+      <tbody id="tbody-mes"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ── P4: AOI ── -->
+<div class="page" id="pg-aoi">
+  <div class="fbar">
+    <label>Actividad Operativa:</label>
+    <select id="aoi-sel" onchange="renderAOI()">
+      <option value="AOI177">AOI177 · Desarrollo de Investigaciones</option>
+      <option value="AOI493">AOI493 · Innovación — Evaluación</option>
+      <option value="AOI499">AOI499 · Laboratorio Innovación Quirúrgica</option>
+      <option value="AOI176">AOI176 · Cirugía Experimental</option>
+      <option value="AOI273">AOI273 · Capacitación y Docencia</option>
+      <option value="AOI381">AOI381 · Telecapacitación y Teleeducación</option>
+      <option value="AOI268">AOI268 · Gestión Administrativa UDITD</option>
+    </select>
+  </div>
+  <div id="aoi-body"></div>
+</div>
+
+<!-- ── P5: FINANCIERO ── -->
+<div class="page" id="pg-financiero">
+  <div class="g4" id="fin-kpis"></div>
+  <div class="g21">
+    <div class="card">
+      <div class="card-t">Ejecución Financiera Mensual — S/</div>
+      <div class="card-s">Línea = programado · Barras = ejecutado · Naranja = pendiente</div>
+      <div class="cw" style="height:260px"><canvas id="c-fin"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">% Ejecución por Mes</div>
+      <div class="card-s">Solo meses ejecutados</div>
+      <div class="cw" style="height:260px"><canvas id="c-fin-pct"></canvas></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-t">Tabla Detalle Mensual</div>
+      <div class="card-s">Brindar soporte diagnóstico Lab. Patología Clínica · CC-95</div>
+      <div class="tw"><table><thead><tr><th>Mes</th><th class="num">Programado S/</th><th class="num">Ejecutado S/</th><th class="num">Diferencia S/</th><th class="num">% Ejec.</th><th>Estado</th></tr></thead><tbody id="tbody-fin"></tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Curva Presupuestal Acumulada</div>
+      <div class="card-s">Programado vs. Ejecutado acumulado</div>
+      <div class="cw" style="height:200px"><canvas id="c-acum"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── P6: BRECHAS ── -->
+<div class="page" id="pg-brechas">
+  <div class="g4" id="brecha-kpis"></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-t">Ranking de Brecha Física (Ejec − Prog acumulado)</div>
+      <div class="card-s">Solo indicadores con meta en meses ejecutados · Ordenado por desvío</div>
+      <div class="cw" style="height:300px"><canvas id="c-rank"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Indicadores Críticos (Rojo)</div>
+      <div class="card-s">Sub-tareas con ejecución &lt; 50% de la meta programada</div>
+      <div class="tw"><table><thead><tr><th>AOI</th><th>Indicador</th><th class="num">Prog.</th><th class="num">Ejec.</th><th class="num">%</th></tr></thead><tbody id="tbody-crit"></tbody></table></div>
+      <div style="margin-top:14px" id="alertas-lista"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+/* ══════════════════════════════════
+   CONSTANTES Y HELPERS
+══════════════════════════════════ */
+const MESES=['ene','feb','mar','abr','may','jun','jul','ago','set','oct','nov','dic'];
+const MESES_L=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SET','OCT','NOV','DIC'];
+const ACOLOR={AOI177:'#4f8ef7',AOI493:'#a78bfa',AOI499:'#c084fc',AOI176:'#f59e0b',AOI273:'#22d3a0',AOI381:'#38bdf8',AOI268:'#fb923c'};
+const ARCOLOR={INVESTIGACIÓN:'#4f8ef7',INNOVACIÓN:'#a78bfa','CIRUGIA EXP.':'#f59e0b',DOCENCIA:'#22d3a0',TELECAPACITACIÓN:'#38bdf8',GESTIÓN:'#fb923c'};
+const PTITLES={overview:'Resumen Ejecutivo',fisico:'Metas Físicas — Detalle Completo',mensual:'Avance Mensual por Indicador',aoi:'Análisis por Actividad Operativa',financiero:'Ejecución Financiera Presupuestal',brechas:'Brechas, Alertas y Cumplimiento'};
+
+Chart.defaults.color='#8892a4';
+Chart.defaults.borderColor='rgba(42,47,69,.7)';
+Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+Chart.defaults.font.size=11;
+
+let D={};   // datos.json completo
+let CHARTS={};  // instancias de charts
+let activeAOI=null;
+let corte='feb';  // mes de corte actual
+
+// Calcula programado+ejecutado acumulado hasta el mes de corte
+function acum(r,campo,hasta){
+  let s=0;
+  for(let i=0;i<=MESES.indexOf(hasta);i++){
+    const v=r[MESES[i]+'_'+campo];
+    if(v!=null) s+=v;
+  }
+  return s;
+}
+function pct(p,e){if(p===0&&e===0)return null;if(p===0)return e>0?999:null;return Math.round(e/p*100);}
+function semC(v){return v===null?'#4a5568':v>=100?'#22d3a0':v>=50?'#f59e0b':'#f04b4b';}
+function semCls(v){return v===null?'sn':v>=100?'sg':v>=50?'sa':'sr';}
+function pctLbl(v){return v===null?'—':v>=999?'Sin meta (prog=0)':v>300?'>300%':v+'%';}
+function fmtN(n){return n==null?'—':n.toLocaleString('es-PE');}
+function fmtS(n){return n==null?'—':'S/ '+n.toLocaleString('es-PE',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function destroyChart(id){if(CHARTS[id]){CHARTS[id].destroy();delete CHARTS[id];}}
+function mkChart(id,cfg){destroyChart(id);CHARTS[id]=new Chart(document.getElementById(id),cfg);return CHARTS[id];}
+
+/* ══════════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════════ */
+function nav(el,id){
+  document.querySelectorAll('.nav-i').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  document.getElementById('pt').textContent=PTITLES[id];
+  if(id==='aoi') renderAOI();
+  if(id==='mensual') renderMensual();
+  if(id==='fisico') filtrar();
+}
+
+/* ══════════════════════════════════
+   INIT — carga datos.json
+══════════════════════════════════ */
+async function init(){
+  try{
+    const res=await fetch('datos.json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    D=await res.json();
+    document.getElementById('loading').style.display='none';
+    document.querySelector('.sb').style.display='flex';
+    document.querySelector('.main').style.display='flex';
+    buildUI();
+  }catch(e){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('err').style.display='flex';
+    console.error(e);
+  }
+}
+
+function buildUI(){
+  // Meta info
+  document.getElementById('sb-periodo').textContent='UDITD · POI '+D.meta.periodo;
+  document.getElementById('sb-ult').textContent='Últ. actualización: '+D.meta.ultima_actualizacion;
+  document.getElementById('chip-corte').textContent='Corte: '+D.meta.ultima_actualizacion;
+  document.getElementById('sb-total').textContent=D.subtareas.length;
+
+  // Detectar mes de corte automáticamente (último mes con ejecutado)
+  let lastMes='ene';
+  D.subtareas.forEach(r=>{
+    MESES.forEach(m=>{if(r[m+'_e']!=null) lastMes=m;});
+  });
+  corte=lastMes;
+  document.getElementById('f-mes').value=corte==='feb'?'feb':corte;
+
+  renderOverview();
+  renderFinanciero();
+  renderBrechas();
+  filtrar();
+}
+
+/* ══════════════════════════════════
+   OVERVIEW
+══════════════════════════════════ */
+function renderOverview(){
+  const sub=D.subtareas;
+  const total=sub.length;
+  const conMeta=sub.filter(r=>acum(r,'p',corte)>0||acum(r,'e',corte)>0);
+  const verde=conMeta.filter(r=>{const v=pct(acum(r,'p',corte),acum(r,'e',corte));return v!==null&&v>=100;}).length;
+  const rojo=conMeta.filter(r=>{const p=acum(r,'p',corte),e=acum(r,'e',corte);const v=pct(p,e);return v!==null&&v<50&&p>0;}).length;
+  const traz=sub.filter(r=>r.traz==='SI').length;
+
+  document.getElementById('kpi-row').innerHTML=`
+    <div class="kpi" style="border-top:2px solid var(--acc)"><div class="kpi-l">Indicadores totales</div><div class="kpi-v" style="color:var(--acc)">${total}</div><div class="kpi-s">CC-95 · 7 AOI activas</div><div class="kpi-bar"><div class="kpi-f" style="width:100%;background:var(--acc)"></div></div></div>
+    <div class="kpi" style="border-top:2px solid var(--grn)"><div class="kpi-l">Verde ≥ 100%</div><div class="kpi-v" style="color:var(--grn)">${verde}</div><div class="kpi-s">En o sobre meta acumulada</div><div class="kpi-bar"><div class="kpi-f" style="width:${Math.round(verde/total*100)}%;background:var(--grn)"></div></div></div>
+    <div class="kpi" style="border-top:2px solid var(--amb)"><div class="kpi-l">Trazadores</div><div class="kpi-v" style="color:var(--amb)">${traz}</div><div class="kpi-s">Compromisos de mejora · ${Math.round(traz/total*100)}% del total</div><div class="kpi-bar"><div class="kpi-f" style="width:${Math.round(traz/total*100)}%;background:var(--amb)"></div></div></div>
+    <div class="kpi" style="border-top:2px solid var(--red)"><div class="kpi-l">Alertas críticas</div><div class="kpi-v" style="color:var(--red)">${rojo}</div><div class="kpi-s">Indicadores con déficit &lt;50%</div><div class="kpi-bar"><div class="kpi-f" style="width:${Math.round(rojo/total*100)}%;background:var(--red)"></div></div></div>
+  `;
+
+  // AOI bar chart
+  const aoiKeys=['AOI177','AOI493','AOI499','AOI176','AOI273','AOI381','AOI268'];
+  const aoiL=['Investigaciones','Innov.Eval.','Lab.Innov.','Cirugía Exp.','Docencia','Telecap.','Gestión'];
+  const pData=aoiKeys.map(k=>D.subtareas.filter(r=>r.aoi===k).reduce((s,r)=>s+acum(r,'p',corte),0));
+  const eData=aoiKeys.map(k=>D.subtareas.filter(r=>r.aoi===k).reduce((s,r)=>s+acum(r,'e',corte),0));
+
+  mkChart('c-aoi',{type:'bar',data:{labels:aoiL,datasets:[
+    {label:'Programado',data:pData,backgroundColor:'rgba(255,255,255,.08)',borderColor:'rgba(255,255,255,.2)',borderWidth:1,borderRadius:4},
+    {label:'Ejecutado',data:eData,backgroundColor:aoiKeys.map(k=>ACOLOR[k]+'bb'),borderColor:aoiKeys.map(k=>ACOLOR[k]),borderWidth:1.5,borderRadius:4},
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    onClick:(e,els)=>{
+      if(els.length){activeAOI=aoiKeys[els[0].index];document.getElementById('aoi-filter-lbl').textContent='· '+aoiL[els[0].index];}
+      else{activeAOI=null;document.getElementById('aoi-filter-lbl').textContent='';}
+      renderSemTable();
+    },
+    plugins:{legend:{position:'top',labels:{boxWidth:10,padding:10}}},
+    scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1000?v/1000+'k':v,font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}
+  });
+
+  // Pie semáforo
+  const sinMeta=sub.filter(r=>pct(acum(r,'p',corte),acum(r,'e',corte))===null).length;
+  const amarillo=conMeta.filter(r=>{const v=pct(acum(r,'p',corte),acum(r,'e',corte));return v!==null&&v>=50&&v<100;}).length;
+  mkChart('c-sem-pie',{type:'doughnut',data:{labels:['Verde ≥100%','Amarillo 50-99%','Rojo <50%','Sin meta'],datasets:[{data:[verde,amarillo,rojo,sinMeta],backgroundColor:['rgba(34,211,160,.8)','rgba(245,158,11,.8)','rgba(240,75,75,.8)','rgba(74,85,104,.5)'],borderColor:'#1f2333',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  document.getElementById('sem-legend').innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:11px">
+      <div style="display:flex;justify-content:space-between"><span><span class="sem sg"></span> Verde ≥100%</span><strong style="color:var(--grn)">${verde}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span><span class="sem sa"></span> Amarillo 50-99%</span><strong style="color:var(--amb)">${amarillo}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span><span class="sem sr"></span> Rojo &lt;50%</span><strong style="color:var(--red)">${rojo}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span><span class="sem sn"></span> Sin meta</span><strong style="color:var(--mut)">${sinMeta}</strong></div>
+    </div>`;
+
+  // Trazadores
+  const areas=['INVESTIGACIÓN','CIRUGIA EXP.','DOCENCIA','TELECAPACITACIÓN','GESTIÓN'];
+  const aLbls=['Invest.','Cir.Exp.','Docencia','Telecap.','Gestión'];
+  mkChart('c-traz',{type:'bar',data:{labels:aLbls,datasets:[
+    {label:'Trazador',data:areas.map(a=>D.subtareas.filter(r=>r.area===a&&r.traz==='SI').length),backgroundColor:'rgba(167,139,250,.8)',borderRadius:3},
+    {label:'No trazador',data:areas.map(a=>D.subtareas.filter(r=>r.area===a&&r.traz==='NO').length),backgroundColor:'rgba(79,142,247,.25)',borderRadius:3},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}},grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+  renderSemTable();
+}
+
+function renderSemTable(){
+  const d=activeAOI?D.subtareas.filter(r=>r.aoi===activeAOI):D.subtareas;
+  document.getElementById('tbody-ov').innerHTML=d.map(r=>{
+    const p=acum(r,'p',corte),e=acum(r,'e',corte),v=pct(p,e);
+    return `<tr><td><span class="sem ${semCls(v)}"></span></td>
+      <td style="color:${ACOLOR[r.aoi]};font-size:10px">${r.aoi}</td>
+      <td style="font-size:10px;max-width:200px">${r.sub}</td>
+      <td style="text-align:center">${r.traz==='SI'?`<span style="color:var(--amb);font-size:10px">●</span>`:''}</td>
+      <td class="num">${fmtN(p)}</td><td class="num">${fmtN(e)}</td>
+      <td class="num" style="font-weight:700;color:${semC(v)}">${pctLbl(v)}</td></tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════
+   METAS FÍSICAS — TABLA
+══════════════════════════════════ */
+function filtrar(){
+  corte=document.getElementById('f-mes')?.value||corte;
+  const fa=document.getElementById('f-area')?.value||'';
+  const ft=document.getElementById('f-traz')?.value||'';
+  const fe=document.getElementById('f-est')?.value||'';
+  const d=D.subtareas.filter(r=>{
+    if(fa&&r.area!==fa)return false;
+    if(ft&&r.traz!==ft)return false;
+    if(fe){
+      const p=acum(r,'p',corte),e=acum(r,'e',corte),v=pct(p,e);
+      if(fe==='verde'&&(v===null||v<100))return false;
+      if(fe==='rojo'&&(v===null||v>=50))return false;
+      if(fe==='sin'&&v!==null)return false;
+    }
+    return true;
+  });
+  document.getElementById('fc').textContent=`${d.length} de ${D.subtareas.length} indicadores`;
+  document.getElementById('tbody-fis').innerHTML=d.map(r=>{
+    const p=acum(r,'p',corte),e=acum(r,'e',corte),v=pct(p,e);
+    const col=semC(v);const brecha=e-p;
+    const pvsA=r.anual>0?Math.round(e/r.anual*100):null;
+    return `<tr>
+      <td><span class="sem ${semCls(v)}"></span></td>
+      <td style="font-size:10px;color:${ARCOLOR[r.area]||'#aaa'};font-weight:600;white-space:nowrap">${r.area}</td>
+      <td style="font-size:10px;color:${ACOLOR[r.aoi]}">${r.aoi}</td>
+      <td style="max-width:220px;font-size:11px">${r.sub}</td>
+      <td style="font-size:10px;color:var(--mut);white-space:nowrap">${r.unidad}</td>
+      <td style="text-align:center">${r.traz==='SI'?`<span style="color:var(--amb);font-weight:700">Sí</span>`:`<span style="color:var(--mut)">—</span>`}</td>
+      <td class="num">${fmtN(p)}</td>
+      <td class="num" style="color:${e>p&&p>0?'var(--grn)':e<p&&p>0?'var(--red)':'inherit'}">${fmtN(e)}</td>
+      <td class="num" style="color:${brecha>=0?'var(--grn)':brecha<0?'var(--red)':'inherit'}">${p>0||e>0?(brecha>=0?'+':'')+fmtN(brecha):'—'}</td>
+      <td class="num" style="font-weight:700;color:${col}">${pctLbl(v)}</td>
+      <td class="num" style="color:var(--mut)">${fmtN(r.anual)}</td>
+      <td class="num" style="color:${pvsA>=100?'var(--grn)':pvsA>=50?'var(--amb)':'var(--red)'}">${pvsA!=null?pvsA+'%':'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════
+   MENSUAL
+══════════════════════════════════ */
+let mc1=null,mc2=null;
+function renderMensual(){
+  const aoi=document.getElementById('mes-aoi').value;
+  const rows=aoi?D.subtareas.filter(r=>r.aoi===aoi):D.subtareas;
+  const eByMes=MESES.map(m=>rows.reduce((s,r)=>s+(r[m+'_e']||0),0));
+  const pByMes=MESES.map(m=>rows.reduce((s,r)=>s+(r[m+'_p']||0),0));
+  const hasE=MESES.map(m=>rows.some(r=>r[m+'_e']!=null));
+
+  if(mc1){mc1.destroy();}
+  if(mc2){mc2.destroy();}
+  mc1=new Chart(document.getElementById('c-evol'),{type:'bar',data:{labels:MESES_L,datasets:[
+    {type:'line',label:'Programado',data:pByMes,borderColor:'#4f8ef7',backgroundColor:'transparent',pointRadius:3,tension:.3,borderWidth:2},
+    {label:'Ejecutado',data:eByMes.map((v,i)=>hasE[i]?v:null),backgroundColor:MESES_L.map((_,i)=>hasE[i]?'rgba(34,211,160,.7)':'rgba(74,85,104,.2)'),borderRadius:3},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,font:{size:10}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1000?v/1000+'k':v,font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  const cumMeses=MESES_L.filter((_,i)=>hasE[i]&&pByMes[i]>0);
+  const cumPct=MESES.map((m,i)=>hasE[i]&&pByMes[i]>0?Math.round(eByMes[i]/pByMes[i]*100):null).filter(v=>v!=null);
+  mc2=new Chart(document.getElementById('c-cum'),{type:'bar',data:{labels:cumMeses,datasets:[{label:'% Cumplimiento',data:cumPct,backgroundColor:cumPct.map(v=>v>=100?'rgba(34,211,160,.7)':v>=50?'rgba(245,158,11,.7)':'rgba(240,75,75,.7)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  document.getElementById('tbody-mes').innerHTML=rows.map(r=>`
+    <tr>
+      <td style="font-size:10px;max-width:200px">${r.sub}</td>
+      ${MESES.map(m=>{
+        const p=r[m+'_p']||0,e=r[m+'_e'];
+        const has=e!=null;
+        const col=has?(e>=p&&p>0?'var(--grn)':e<p&&p>0?'var(--red)':'inherit'):'var(--mut)';
+        return `<td class="num" style="color:${col}">${has?fmtN(e):`<span style="font-size:9px;color:var(--mut)">${p>0?p:''}</span>`}</td>`;
+      }).join('')}
+      <td class="num" style="color:var(--mut)">${fmtN(r.anual)}</td>
+    </tr>`).join('');
+}
+
+/* ══════════════════════════════════
+   AOI DETALLE
+══════════════════════════════════ */
+let aoiC1=null,aoiC2=null;
+function renderAOI(){
+  const k=document.getElementById('aoi-sel').value;
+  const rows=D.subtareas.filter(r=>r.aoi===k);
+  const col=ACOLOR[k]||'#4f8ef7';
+  const verde=rows.filter(r=>{const v=pct(acum(r,'p',corte),acum(r,'e',corte));return v!==null&&v>=100;}).length;
+  const rojo=rows.filter(r=>{const v=pct(acum(r,'p',corte),acum(r,'e',corte));return v!==null&&v<100;}).length;
+
+  document.getElementById('aoi-body').innerHTML=`
+    <div class="g4 mb">
+      <div class="kpi" style="border-top:2px solid ${col}"><div class="kpi-l">Sub-tareas</div><div class="kpi-v" style="color:${col}">${rows.length}</div><div class="kpi-s">${k}</div></div>
+      <div class="kpi" style="border-top:2px solid var(--amb)"><div class="kpi-l">Trazadores</div><div class="kpi-v" style="color:var(--amb)">${rows.filter(r=>r.traz==='SI').length}</div><div class="kpi-s">de ${rows.length} indicadores</div></div>
+      <div class="kpi" style="border-top:2px solid var(--grn)"><div class="kpi-l">Verde</div><div class="kpi-v" style="color:var(--grn)">${verde}</div><div class="kpi-s">Cumple o supera meta</div></div>
+      <div class="kpi" style="border-top:2px solid var(--red)"><div class="kpi-l">Con déficit</div><div class="kpi-v" style="color:var(--red)">${rojo}</div><div class="kpi-s">Bajo meta acumulada</div></div>
+    </div>
+    <div class="g2 mb">
+      <div class="card"><div class="card-t">Prog. vs. Ejec. Acumulado</div><div class="card-s">Corte: ${corte.toUpperCase()}</div><div class="cw" style="height:200px"><canvas id="aoi-c1"></canvas></div></div>
+      <div class="card"><div class="card-t">% Avance por Indicador</div><div class="card-s">Verde ≥100% · Amarillo 50-99% · Rojo &lt;50%</div><div class="cw" style="height:200px"><canvas id="aoi-c2"></canvas></div></div>
+    </div>
+    <div class="card"><div class="card-t">Detalle de indicadores — ${k}</div><div class="card-s">Datos al corte: ${corte.toUpperCase()}</div>
+    <div class="tw"><table><thead><tr><th>Est.</th><th>Indicador</th><th>Unidad</th><th>Traz.</th><th class="num">Prog.Acum</th><th class="num">Ejec.Acum</th><th class="num">Brecha</th><th class="num">% Avance</th><th class="num">Meta Anual</th></tr></thead>
+    <tbody>${rows.map(r=>{
+      const p=acum(r,'p',corte),e=acum(r,'e',corte),v=pct(p,e);
+      const b=e-p;
+      return `<tr><td><span class="sem ${semCls(v)}"></span></td><td style="font-size:11px;max-width:200px">${r.sub}</td><td style="font-size:10px;color:var(--mut)">${r.unidad}</td><td style="text-align:center">${r.traz==='SI'?`<span style="color:var(--amb)">●</span>`:''}</td><td class="num">${fmtN(p)}</td><td class="num">${fmtN(e)}</td><td class="num" style="color:${b>=0?'var(--grn)':'var(--red)'}">${p>0||e>0?(b>=0?'+':'')+fmtN(b):'—'}</td><td class="num" style="font-weight:700;color:${semC(v)}">${pctLbl(v)}</td><td class="num" style="color:var(--mut)">${fmtN(r.anual)}</td></tr>`;
+    }).join('')}</tbody></table></div></div>`;
+
+  const lbls=rows.map(r=>r.sub.length>22?r.sub.substring(0,22)+'…':r.sub);
+  const pVals=rows.map(r=>acum(r,'p',corte));
+  const eVals=rows.map(r=>acum(r,'e',corte));
+  const pctVals=rows.map(r=>Math.min(pct(acum(r,'p',corte),acum(r,'e',corte))||0,300));
+
+  if(aoiC1)aoiC1.destroy();
+  if(aoiC2)aoiC2.destroy();
+  aoiC1=new Chart(document.getElementById('aoi-c1'),{type:'bar',data:{labels:lbls,datasets:[{label:'Prog.',data:pVals,backgroundColor:'rgba(255,255,255,.08)',borderRadius:3},{label:'Ejec.',data:eVals,backgroundColor:col+'bb',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{boxWidth:8,font:{size:9}}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v>=1000?v/1000+'k':v,font:{size:8}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{font:{size:8}}}}}});
+  aoiC2=new Chart(document.getElementById('aoi-c2'),{type:'bar',data:{labels:lbls,datasets:[{label:'% Avance',data:pctVals,backgroundColor:pctVals.map(v=>v>=100?'rgba(34,211,160,.7)':v>=50?'rgba(245,158,11,.7)':'rgba(240,75,75,.7)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{x:{beginAtZero:true,max:320,ticks:{callback:v=>v+'%',font:{size:8}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{font:{size:8}}}}}});
+}
+
+/* ══════════════════════════════════
+   FINANCIERO
+══════════════════════════════════ */
+function renderFinanciero(){
+  const fin=D.financiero;
+  const ejecutados=fin.filter(f=>f.ejec!=null);
+  const totP=fin.reduce((s,f)=>s+f.prog,0);
+  const totE=ejecutados.reduce((s,f)=>s+f.ejec,0);
+  const saldo=totP-totE;
+  const ultimo=ejecutados[ejecutados.length-1];
+
+  document.getElementById('fin-kpis').innerHTML=`
+    <div class="kpi" style="border-top:2px solid var(--acc)"><div class="kpi-l">Presupuesto Anual</div><div class="kpi-v" style="color:var(--acc);font-size:18px">${fmtS(totP)}</div><div class="kpi-s">Lab. Patología Clínica</div></div>
+    <div class="kpi" style="border-top:2px solid var(--grn)"><div class="kpi-l">Ejecutado a la fecha</div><div class="kpi-v" style="color:var(--grn);font-size:18px">${fmtS(totE)}</div><div class="kpi-s">${Math.round(totE/totP*100)}% del presupuesto anual</div></div>
+    <div class="kpi" style="border-top:2px solid var(--amb)"><div class="kpi-l">Avance último mes (${ultimo?.mes})</div><div class="kpi-v" style="color:var(--amb)">${ultimo?Math.round(ultimo.ejec/ultimo.prog*100)+'%':'—'}</div><div class="kpi-s">${fmtS(ultimo?.ejec)} ejec. / ${fmtS(ultimo?.prog)} prog.</div></div>
+    <div class="kpi" style="border-top:2px solid var(--red)"><div class="kpi-l">Saldo por ejecutar</div><div class="kpi-v" style="color:var(--red);font-size:18px">${fmtS(saldo)}</div><div class="kpi-s">${fin.length-ejecutados.length} meses pendientes</div></div>
+  `;
+
+  mkChart('c-fin',{type:'bar',data:{labels:fin.map(f=>f.mes),datasets:[
+    {type:'line',label:'Programado',data:fin.map(f=>f.prog),borderColor:'#4f8ef7',backgroundColor:'transparent',pointRadius:3,tension:.3,borderWidth:2},
+    {label:'Ejecutado',data:fin.map(f=>f.ejec),backgroundColor:fin.map(f=>f.ejec==null?'rgba(74,85,104,.2)':f.ejec>=f.prog?'rgba(34,211,160,.7)':'rgba(245,158,11,.7)'),borderRadius:4},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:8}}},scales:{y:{min:70000,ticks:{callback:v=>'S/'+Math.round(v/1000)+'k',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  const ejMeses=ejecutados.map(f=>f.mes);
+  const ejPct=ejecutados.map(f=>Math.round(f.ejec/f.prog*100));
+  mkChart('c-fin-pct',{type:'bar',data:{labels:ejMeses,datasets:[{label:'% Ejecución',data:ejPct,backgroundColor:ejPct.map(v=>v>=100?'rgba(34,211,160,.7)':'rgba(245,158,11,.7)'),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{y:{beginAtZero:false,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  let pa=0,ea=0;
+  const paA=[],eaA=[];
+  fin.forEach(f=>{pa+=f.prog;if(f.ejec!=null)ea+=f.ejec;paA.push(Math.round(pa));eaA.push(ea>0?Math.round(ea):null);});
+  mkChart('c-acum',{type:'line',data:{labels:fin.map(f=>f.mes),datasets:[{label:'Prog. acum.',data:paA,borderColor:'#4f8ef7',backgroundColor:'rgba(79,142,247,.07)',fill:true,tension:.3,borderWidth:2,pointRadius:2},{label:'Ejec. acum.',data:eaA,borderColor:'#22d3a0',backgroundColor:'rgba(34,211,160,.07)',fill:true,tension:.3,borderWidth:2,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,font:{size:10}}}},scales:{y:{ticks:{callback:v=>'S/'+Math.round(v/1000)+'k',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+
+  document.getElementById('tbody-fin').innerHTML=fin.map(f=>{
+    const p=f.ejec!=null?Math.round(f.ejec/f.prog*100):null;
+    const dif=f.ejec!=null?Math.round(f.ejec-f.prog):null;
+    return `<tr><td>${f.mes}</td><td class="num">${fmtS(f.prog)}</td><td class="num">${f.ejec!=null?fmtS(f.ejec):`<span style="color:var(--mut)">Pendiente</span>`}</td><td class="num" style="color:${dif==null?'var(--mut)':dif>=0?'var(--grn)':'var(--red)'}">${dif!=null?(dif>=0?'+':'')+fmtS(dif):'—'}</td><td class="num" style="font-weight:700;color:${p==null?'var(--mut)':p>=100?'var(--grn)':'var(--amb)'}">${p!=null?p+'%':'—'}</td><td><span class="chip ${p==null?'c-blue':p>=100?'c-green':'c-amber'}" style="font-size:9px">${p==null?'Pendiente':p>=100?'✓ Meta alcanzada':'Bajo meta'}</span></td></tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════
+   BRECHAS
+══════════════════════════════════ */
+function renderBrechas(){
+  const sub=D.subtareas;
+  const conMeta=sub.filter(r=>acum(r,'p',corte)>0);
+  const verde=conMeta.filter(r=>pct(acum(r,'p',corte),acum(r,'e',corte))>=100).length;
+  const amarillo=conMeta.filter(r=>{const v=pct(acum(r,'p',corte),acum(r,'e',corte));return v>=50&&v<100;}).length;
+  const rojo=conMeta.filter(r=>pct(acum(r,'p',corte),acum(r,'e',corte))<50).length;
+  const sinMeta=sub.filter(r=>acum(r,'p',corte)===0).length;
+
+  document.getElementById('brecha-kpis').innerHTML=`
+    <div class="kpi" style="border-top:2px solid var(--grn)"><div class="kpi-l">Verde ≥ 100%</div><div class="kpi-v" style="color:var(--grn)">${verde}</div><div class="kpi-s">En o sobre meta</div></div>
+    <div class="kpi" style="border-top:2px solid var(--amb)"><div class="kpi-l">Amarillo 50–99%</div><div class="kpi-v" style="color:var(--amb)">${amarillo}</div><div class="kpi-s">Riesgo moderado</div></div>
+    <div class="kpi" style="border-top:2px solid var(--red)"><div class="kpi-l">Rojo &lt; 50%</div><div class="kpi-v" style="color:var(--red)">${rojo}</div><div class="kpi-s">Déficit crítico</div></div>
+    <div class="kpi" style="border-top:2px solid var(--mut)"><div class="kpi-l">Sin meta acumulada</div><div class="kpi-v" style="color:var(--mut)">${sinMeta}</div><div class="kpi-s">Programación trimestral</div></div>
+  `;
+
+  const ranked=[...conMeta].sort((a,b)=>(acum(b,'e',corte)-acum(b,'p',corte))-(acum(a,'e',corte)-acum(a,'p',corte)));
+  const rLbls=ranked.map(r=>r.sub.length>22?r.sub.substring(0,22)+'…':r.sub);
+  const rVals=ranked.map(r=>acum(r,'e',corte)-acum(r,'p',corte));
+  mkChart('c-rank',{type:'bar',data:{labels:rLbls,datasets:[{label:'Brecha',data:rVals,backgroundColor:rVals.map(v=>v>=0?'rgba(34,211,160,.7)':'rgba(240,75,75,.7)'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+c.raw.toLocaleString()}}},scales:{x:{ticks:{callback:v=>v>=1000?v/1000+'k':v,font:{size:8}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{font:{size:8}}}}}});
+
+  const criticos=conMeta.filter(r=>pct(acum(r,'p',corte),acum(r,'e',corte))<50).sort((a,b)=>pct(acum(a,'p',corte),acum(a,'e',corte))-pct(acum(b,'p',corte),acum(b,'e',corte)));
+  document.getElementById('tbody-crit').innerHTML=criticos.map(r=>{
+    const p=acum(r,'p',corte),e=acum(r,'e',corte),v=pct(p,e);
+    return `<tr><td style="color:${ACOLOR[r.aoi]};font-size:10px">${r.aoi}</td><td style="font-size:10px">${r.sub}</td><td class="num">${fmtN(p)}</td><td class="num">${fmtN(e)}</td><td class="num" style="color:var(--red);font-weight:700">${pctLbl(v)}</td></tr>`;
+  }).join('')||`<tr><td colspan="5" style="text-align:center;color:var(--grn);padding:20px">✓ Sin indicadores críticos al corte ${corte.toUpperCase()}</td></tr>`;
+
+  document.getElementById('alertas-lista').innerHTML=`
+    <div style="font-size:11px;font-weight:600;color:var(--mut);margin-bottom:8px">ALERTAS ACTIVAS</div>
+    ${criticos.length===0?`<div style="color:var(--grn);font-size:11px">Sin alertas activas</div>`:criticos.map(r=>`
+    <div style="padding:8px 10px;background:var(--red-d);border:1px solid rgba(240,75,75,.2);border-radius:6px;margin-bottom:6px;font-size:11px">
+      <div style="color:var(--red);font-weight:600">${r.aoi} · ${r.sub.substring(0,40)}…</div>
+      <div style="color:var(--mut);margin-top:2px">Ejec: ${fmtN(acum(r,'e',corte))} / Prog: ${fmtN(acum(r,'p',corte))} · ${pctLbl(pct(acum(r,'p',corte),acum(r,'e',corte)))}</div>
+    </div>`).join('')}
+  `;
+}
+
+// Ocultar sidebar y main hasta cargar
+document.querySelector('.sb').style.display='none';
+document.querySelector('.main').style.display='none';
+
+init();
+</script>
+</body>
+</html>
