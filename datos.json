@@ -16,8 +16,8 @@
   },
 
   "financiero": [
-    { "mes": "ENE", "prog": 82028.88, "ejec": 79036 },
-    { "mes": "FEB", "prog": 91271.46, "ejec": 85749 },
+    { "mes": "ENE", "prog": 1991070.88, "ejec": 472309 },
+    { "mes": "FEB", "prog": 1991070.46, "ejec": 472309 },
     { "mes": "MAR", "prog": 76044.90, "ejec": null },
     { "mes": "ABR", "prog": 87639.82, "ejec": null },
     { "mes": "MAY", "prog": 86341.12, "ejec": null },
