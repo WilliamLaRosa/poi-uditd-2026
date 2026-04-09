@@ -416,10 +416,10 @@
       "dic_p": 75, "dic_e": null
     },
     {
-      "id": 21, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 22, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Implementación formación RRHH",
       "sub": "Admisión del Residente de sede, segun campo clinico",
-      "unidad": "N° de admisiones", "traz": "NO", "anual": 250,
+      "unidad": "N° de admisiones", "traz": "NO", "anual": 19,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 0, "mar_e": 0,
@@ -434,7 +434,7 @@
       "dic_p": 0, "dic_e": null
     },
     {
-      "id": 22, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 23, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Implementación formación RRHH",
       "sub": "Rotaciones de residente externo",
       "unidad": "N° rotaciones", "traz": "NO", "anual": 600,
@@ -452,7 +452,7 @@
       "dic_p": 50, "dic_e": null
     },
     {
-      "id": 23, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 24, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Implementación formación RRHH",
       "sub": "Pasantías profesionales externas",
       "unidad": "N° pasantías", "traz": "NO", "anual": 40,
@@ -470,7 +470,7 @@
       "dic_p": 10, "dic_e": null
     },
     {
-      "id": 24, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 25, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión residentado INSN SB",
       "sub": "Sesiones inducción residentes externos",
       "unidad": "N° sesiones para residentes externos", "traz": "NO", "anual": 12,
@@ -488,10 +488,10 @@
       "dic_p": 1, "dic_e": null
     },
     {
-      "id": 24, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 26, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión residentado INSN SB",
       "sub": "Actividads de inducción para residentes y alumnos",
-      "unidad": "N° sesiones de inducción para residente en sede", "traz": "NO", "anual": 12,
+      "unidad": "N° sesiones de inducción para residente en sede", "traz": "NO", "anual": 1,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 0, "mar_e": 0,
@@ -506,10 +506,10 @@
       "dic_p": 0, "dic_e": null
     },
      {
-      "id": 24, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 27, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión residentado INSN SB",
       "sub": "Actividads de inducción para residentes y alumnos",
-      "unidad": "N° de participantes en cursos de induccion para residentes en sede", "traz": "NO", "anual": 12,
+      "unidad": "N° de participantes en cursos de induccion para residentes en sede", "traz": "NO", "anual": 19,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 0, "mar_e": 0,
@@ -524,7 +524,7 @@
       "dic_p": 0, "dic_e": null
     },
     {
-      "id": 25, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 28, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Actividades académicas organizadas",
       "unidad": "N° actividades academicas", "traz": "NO", "anual": 33,
@@ -542,7 +542,7 @@
       "dic_p": 2, "dic_e": null
     },
     {
-      "id": 26, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 29, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Personas capacitadas aprobadas (acad.)",
       "unidad": "N° personas capacitada aprobada segun informe", "traz": "SI", "anual": 2400,
@@ -560,7 +560,7 @@
       "dic_p": 500, "dic_e": null
     },
     {
-      "id": 27, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 30, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Capacitaciones servicios bibliotecarios",
       "unidad": "N° capacitaciones", "traz": "NO", "anual": 48,
@@ -578,10 +578,10 @@
       "dic_p": 4, "dic_e": null
     },
     {
-      "id": 27, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 31, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Capacitaciones servicios bibliotecarios",
-      "unidad": "N° personas capacitadas", "traz": "NO", "anual": 48,
+      "unidad": "N° personas capacitadas", "traz": "NO", "anual": 400,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 100, "mar_e": 482,
@@ -596,10 +596,10 @@
       "dic_p": 100, "dic_e": null
     },
     {
-      "id": 27, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 32, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Gestión de programas para la formación de profesionales en Docencia",
-      "unidad": "persona capacitada", "traz": "NO", "anual": 48,
+      "unidad": "persona capacitada", "traz": "NO", "anual": 80,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 0, "mar_e": 0,
@@ -614,7 +614,7 @@
       "dic_p": 40, "dic_e": null
     },
     {
-      "id": 28, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 33, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Conversatorios casos clínicos",
       "unidad": "N° conversatorios casos clinicos", "traz": "NO", "anual": 16,
@@ -632,10 +632,10 @@
       "dic_p": 4, "dic_e": null
     },
     {
-      "id": 28, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 34, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Actividades académicas y perfeccionamiento",
       "sub": "Conversatorios casos clínicos",
-      "unidad": "N° de participante en conversatorios sobre casos clinicos", "traz": "NO", "anual": 16,
+      "unidad": "N° de participante en conversatorios sobre casos clinicos", "traz": "NO", "anual": 300,
       "ene_p": 0, "ene_e": 27,
       "feb_p": 0, "feb_e": 46,
       "mar_p": 75, "mar_e": 19,
@@ -650,7 +650,7 @@
       "dic_p": 75, "dic_e": null
     },
     {
-      "id": 29, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 35, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión acceso información científica",
       "sub": "Uso Centro de Información (biblioteca)",
       "unidad": "N° registros", "traz": "NO", "anual": 2400,
@@ -668,7 +668,7 @@
       "dic_p": 200, "dic_e": null
     },
     {
-      "id": 30, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 36, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión acceso información científica",
       "sub": "Asesorías información científica",
       "unidad": "N° asesorías", "traz": "SI", "anual": 396,
@@ -686,10 +686,10 @@
       "dic_p": 33, "dic_e": null
     },
     {
-      "id": 30, "area": "DOCENCIA", "aoi": "AOI273",
+      "id": 37, "area": "DOCENCIA", "aoi": "AOI273",
       "tarea": "Gestión acceso información científica",
       "sub": "Uso de base de datos bibliograficos",
-      "unidad": "N° busquedas en base de datos", "traz": "SI", "anual": 396,
+      "unidad": "N° busquedas en base de datos", "traz": "SI", "anual": 28000,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 9000, "mar_e": 7280,
@@ -704,7 +704,7 @@
       "dic_p": 9000, "dic_e": null
     },
     {
-      "id": 31, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
+      "id": 38, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
       "tarea": "Telesalud Red Nacional",
       "sub": "Telecapacitaciones como centro consultor",
       "unidad": "N° telecapacitaciones brindadas", "traz": "NO", "anual": 76,
@@ -722,7 +722,7 @@
       "dic_p": 6, "dic_e": null
     },
     {
-      "id": 32, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
+      "id": 39, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
       "tarea": "Telesalud Red Nacional",
       "sub": "Personas cap. Jueves/Martes Divulgación",
       "unidad": "N° persona capacitada", "traz": "SI", "anual": 200,
@@ -740,7 +740,7 @@
       "dic_p": 50, "dic_e": null
     },
     {
-      "id": 33, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
+      "id": 40, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
       "tarea": "Telesalud Red Nacional",
       "sub": "Tele-IEC brindadas (centro consultor)",
       "unidad": "N° teleeducaciones brindada población", "traz": "NO", "anual": 12,
@@ -758,7 +758,7 @@
       "dic_p": 1, "dic_e": null
     },
     {
-      "id": 34, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
+      "id": 41, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
       "tarea": "Telesalud Red Nacional",
       "sub": "Participantes Tele-IEC",
       "unidad": "N° participantes de tele IEC", "traz": "SI", "anual": 600,
@@ -776,10 +776,10 @@
       "dic_p": 50, "dic_e": null
     },
     {
-      "id": 34, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
+      "id": 42, "area": "TELECAPACITACIÓN", "aoi": "AOI381",
       "tarea": "Telesalud Red Nacional",
       "sub": "Telecapacitación cono centro de consulta",
-      "unidad": "N° de telecapacitaciones para personal de salud", "traz": "SI", "anual": 600,
+      "unidad": "N° de telecapacitaciones para personal de salud", "traz": "SI", "anual": 4,
       "ene_p": 0, "ene_e": 0,
       "feb_p": 0, "feb_e": 0,
       "mar_p": 1, "mar_e": 1,
@@ -794,7 +794,7 @@
       "dic_p": 1, "dic_e": null
     },
     {
-      "id": 35, "area": "GESTIÓN", "aoi": "AOI268",
+      "id": 43, "area": "GESTIÓN", "aoi": "AOI268",
       "tarea": "Elaboración y revisión documentos UDITD",
       "sub": "Evaluaciones mensuales metas físicas (POI)",
       "unidad": "N° reportes", "traz": "SI", "anual": 12,
@@ -812,7 +812,7 @@
       "dic_p": 1, "dic_e": null
     },
     {
-      "id": 36, "area": "GESTIÓN", "aoi": "AOI268",
+      "id": 44, "area": "GESTIÓN", "aoi": "AOI268",
       "tarea": "Elaboración y revisión documentos UDITD",
       "sub": "Formulación Plan de Trabajo",
       "unidad": "Plan", "traz": "SI", "anual": 1,
@@ -830,7 +830,7 @@
       "dic_p": 0, "dic_e": null
     },
     {
-      "id": 37, "area": "GESTIÓN", "aoi": "AOI268",
+      "id": 45, "area": "GESTIÓN", "aoi": "AOI268",
       "tarea": "Elaboración y revisión documentos UDITD",
       "sub": "Evaluaciones mensuales metas financieras",
       "unidad": "N° reportes", "traz": "SI", "anual": 12,
@@ -848,7 +848,7 @@
       "dic_p": 1, "dic_e": null
     },
     {
-      "id": 38, "area": "GESTIÓN", "aoi": "AOI268",
+      "id": 46, "area": "GESTIÓN", "aoi": "AOI268",
       "tarea": "Elaboración y revisión documentos UDITD",
       "sub": "Documentos normativos revisados",
       "unidad": "N° documentos", "traz": "SI", "anual": 2,
